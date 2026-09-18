@@ -29,14 +29,14 @@
             </div>
 
             <div class="filters">
-                <button class="active">All</button>
-                <button>Todo</button>
-                <button>In Progress</button>
-                <button>Completed</button>
+                <button class="filter-button active" data-filter="all">All</button>
+                <button class="filter-button" data-filter="todo">Todo</button>
+                <button class="filter-button" data-filter="in_progress">In Progress</button>
+                <button class="filter-button" data-filter="completed">Completed</button>
             </div>
 
             <div class="task-list">
-                <article class="task">
+                <article class="task" data-status="todo">
                     <h3>Update resume</h3>
                     <div class ="task-info">
                         <span class="status">Todo</span>
@@ -44,7 +44,7 @@
                     </div>
                 </article>
 
-                <article class="task">
+                <article class="task" data-status="in_progress">
                     <h3>Practice LeetCode</h3>
                     <div class="task-info">
                         <span class="status">In Progress</span>
@@ -54,5 +54,6 @@
             </div>
         </section>
     </main>
+<script src="script.js"></script>
 </body>
 </html>
