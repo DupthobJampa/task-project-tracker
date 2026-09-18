@@ -16,7 +16,7 @@
         <aside>
             <h2>Projects</h2>
             <ul class="project-list">
-                <li>Internship Preparation</li>
+                <li class="active">Internship Preparation</li>
                 <li>University</li>
                 <li>Personal</li>
             </ul>
@@ -29,7 +29,7 @@
             </div>
 
             <div class="filters">
-                <button>All</button>
+                <button class="active">All</button>
                 <button>Todo</button>
                 <button>In Progress</button>
                 <button>Completed</button>
@@ -38,14 +38,18 @@
             <div class="task-list">
                 <article class="task">
                     <h3>Update resume</h3>
-                    <p>Status: Todo</p>
-                    <p>Priority: High</p>
+                    <div class ="task-info">
+                        <span class="status">Todo</span>
+                        <span class="priority">High Priority</span>
+                    </div>
                 </article>
 
                 <article class="task">
                     <h3>Practice LeetCode</h3>
-                    <p>Status: In Progress</p>
-                    <p>Priority: Medium</p>
+                    <div class="task-info">
+                        <span class="status">In Progress</span>
+                        <span class="priority">Medium Priority</span>
+                    </div>
                 </article>
             </div>
         </section>
