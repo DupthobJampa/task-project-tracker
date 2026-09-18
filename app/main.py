@@ -5,11 +5,20 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 from app.database import get_connection
-
+from fastapi.middleware.cors import CORSMiddleware
 
 TaskStatus = Literal["todo", "in_progress", "completed"]
 TaskPriority = Literal["low", "medium", "high"]
+
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://127.0.0.1:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class ProjectCreate(BaseModel):
     name: str
