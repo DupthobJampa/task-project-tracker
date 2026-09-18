@@ -236,3 +236,26 @@ def get_project_summary(project_id: int):
             detail="Project not found"
         )
     return summary
+
+@app.delete("/projects/{project_id}")
+
+def delete_project(project_id: int):
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                DELETE FROM projects
+                WHERE id = %s
+                RETURNING *;
+                """,
+                (project_id,)
+            )
+
+            deleted_project = cur.fetchone()
+            if deleted_project is None:
+                raise HTTPException(
+                    status_code=404,
+                    detail="Project not found"
+                )
+            conn.commit()
+    return deleted_project
