@@ -11,6 +11,35 @@ const newProjectButton = document.querySelector('#new-project-button');
 const projectForm = document.querySelector('#project-form');
 
 let selectedProjectId = null;
+const deleteProjectButton = document.querySelector('#delete-project-button');
+
+deleteProjectButton.addEventListener('click', async () => {
+    if (selectedProjectId === null) {
+        return;
+    }
+
+    const confirmed = confirm(
+        `Delete "${projectTitle.textContent}" and all of its tasks?`
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    const response = await fetch(
+        `http://127.0.0.1:8000/projects/${selectedProjectId}`,
+        {
+            method: 'DELETE'
+        }
+    );
+
+    if (response.ok) {
+        selectedProjectId = null;
+        loadProjects();
+    } else {
+        alert('Failed to delete project.');
+    }
+});
 
 newProjectButton.addEventListener('click', () => {
     projectForm.classList.toggle('hidden');
