@@ -141,3 +141,18 @@ button:hover{
     padding: 8px;
     margin-right: 8px;
 }
+
+.project-form {
+    margin-bottom: 20px;
+}
+
+.project-form input,
+.project-form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 8px;
+}
+
+.project-form textarea {
+    resize: vertical;
+}

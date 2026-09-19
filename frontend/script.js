@@ -1,11 +1,21 @@
 const taskList = document.querySelector('.task-list');
 const filterButtons = document.querySelectorAll('.filter-button');
+
 const projectList = document.querySelector('.project-list');
 const projectTitle = document.querySelector('.task-header h2');
+
 const addTaskButton = document.querySelector('#add-task-button');
 const taskForm = document.querySelector('#task-form')
 
+const newProjectButton = document.querySelector('#new-project-button');
+const projectForm = document.querySelector('#project-form');
+
 let selectedProjectId = null;
+
+newProjectButton.addEventListener('click', () => {
+    projectForm.classList.toggle('hidden');
+});
+
 addTaskButton.addEventListener('click', () => {
     taskForm.classList.toggle('hidden');
 });
@@ -16,9 +26,10 @@ function formatLabel(value) {
         .replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
-async function loadProjects() {
+async function loadProjects(projectIdToSelect = null) {
     const response = await fetch('http://127.0.0.1:8000/projects');
     const projects = await response.json();
+    projectList.innerHTML = '';
 
     projects.forEach((project) => {
         const item = document.createElement('li');
@@ -39,11 +50,19 @@ async function loadProjects() {
         projectList.appendChild(item);
     });
 
-    const firstProject = projectList.querySelector('li');
-
-    if (firstProject) {
-        firstProject.click();
+    let projectToSelect;
+    if (projectIdToSelect !== null) {
+        projectToSelect = projectList.querySelector(
+            `[data-project-id="${projectIdToSelect}"]`
+        );
+    } else {
+        projectToSelect = projectList.querySelector('li');
     }
+
+    if (projectToSelect) {
+        projectToSelect.click();
+    }
+
 }
 
 async function loadTasks(projectId) {
@@ -148,6 +167,38 @@ taskForm.addEventListener('submit', async (event) => {
         loadTasks(selectedProjectId);
     } else {
         alert('Failed to create task.')
+    }
+});
+
+
+projectForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const name = document.querySelector('#project-name').value;
+    const description = document.querySelector('#project-description').value;
+
+    const project = {
+        name: name,
+        description: description || null
+    };
+
+    const response = await fetch(
+        'http://127.0.0.1:8000/projects',
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(project)
+        }
+    );
+
+    if (response.ok) {
+        const createdProject = await response.json();
+        projectForm.reset();
+        projectForm.classList.add('hidden');
+        loadProjects(createdProject.id);
+    } else {
+        alert('Failed to create project.');
     }
 });
 

@@ -9,12 +9,29 @@
 <body>
     <header>
         <h1>Task Tracker</h1>
-        <button>New Project</button>
+        <button id="new-project-button">New Project</button>
     </header>
 
     <main>
         <aside>
             <h2>Projects</h2>
+
+            <form id="project-form" class="project-form hidden">
+                <input
+                    id="project-name"
+                    type="text"
+                    placeholder="Project name"
+                    required
+                >
+
+                <textarea
+                    id="project-description"
+                    placeholder="Description"
+                ></textarea>
+
+                <button type="submit">Create Project</button>
+            </form>
+
             <ul class="project-list"></ul>
         </aside>
 
