@@ -54,22 +54,35 @@
             </div>
 
             <form id="task-form" class="task-form hidden">
-                <input id="task-title" type="text" placeholder="Task title" required>
-                <select id="task-status">
-                    <option value="todo">Todo</option>
-                    <option value="in_progress">In Progress</option>
-                    <option value="completed">Completed</option>
-                </select>
+                <input
+                    id="task-title"
+                    type="text"
+                    placeholder="Task title"
+                    required
+                    >
 
-                <select id="task-priority">
-                    <option value="low">Low Priority</option>
-                    <option value="medium" selected>Medium Priority</option>
-                    <option value="high">High Priority</option>
-                </select>
+                <textarea
+                    id="task-description"
+                    placeholder="Description"
+                ></textarea>
 
-                <input id="task-due-date" type="date">
+                <div class="task-form-options">
+                    <select id="task-status">
+                        <option value="todo">Todo</option>
+                        <option value="in_progress">In Progress</option>
+                        <option value="completed">Completed</option>
+                    </select>
 
-                <button type="submit">Create Task</button>
+                    <select id="task-priority">
+                        <option value="low">Low Priority</option>
+                        <option value="medium" selected>Medium Priority</option>
+                        <option value="high">High Priority</option>
+                    </select>
+
+                    <input id="task-due-date" type="date">
+                    <button id="task-submit-button" type="submit">Create Task</button>
+                    <button id="cancel-edit-button" type="button" class="hidden">Cancel</button>
+                </div>
             </form>
 
             <div class="task-list"></div>

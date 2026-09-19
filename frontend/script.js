@@ -5,13 +5,22 @@ const projectList = document.querySelector('.project-list');
 const projectTitle = document.querySelector('.task-header h2');
 
 const addTaskButton = document.querySelector('#add-task-button');
-const taskForm = document.querySelector('#task-form')
-
+const taskForm = document.querySelector('#task-form');
+const taskSubmitButton = document.querySelector('#task-submit-button');
 const newProjectButton = document.querySelector('#new-project-button');
 const projectForm = document.querySelector('#project-form');
-
+const cancelEditButton = document.querySelector('#cancel-edit-button');
 let selectedProjectId = null;
+let editingTask = null;
 const deleteProjectButton = document.querySelector('#delete-project-button');
+
+cancelEditButton.addEventListener('click', () => {
+    editingTask = null;
+    taskForm.reset();
+    taskForm.classList.add('hidden');
+    taskSubmitButton.textContent = 'Create Task';
+    cancelEditButton.classList.add('hidden');
+});
 
 deleteProjectButton.addEventListener('click', async () => {
     if (selectedProjectId === null) {
@@ -46,12 +55,17 @@ newProjectButton.addEventListener('click', () => {
 });
 
 addTaskButton.addEventListener('click', () => {
+    editingTask = null;
+    taskForm.reset();
+    taskSubmitButton.textContent = 'Create Task';
+    cancelEditButton.classList.add('hidden');
+
     taskForm.classList.toggle('hidden');
 });
 
 function formatLabel(value) {
     return value
-        .replace('_', ' ')
+        .replace(/_/g, ' ')
         .replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
@@ -107,15 +121,43 @@ async function loadTasks(projectId) {
         article.classList.add('task');
         article.dataset.status = task.status;
 
-        article.innerHTML = `
-            <h3>${task.title}</h3>
-            <div class="task-info">
-                <span class="status">${formatLabel(task.status)}</span>
-                <span class="priority">${formatLabel(task.priority)} Priority</span>
-                <button class="delete-task">Delete</button>
-            </div>
-        `;
-        const deleteButton = article.querySelector('.delete-task');
+        const title = document.createElement('h3');
+        title.textContent = task.title;
+
+        const taskInfo = document.createElement('div');
+        taskInfo.classList.add('task-info');
+
+        const status = document.createElement('span');
+        status.classList.add('status');
+        status.textContent = formatLabel(task.status);
+
+        const priority = document.createElement('span');
+        priority.classList.add('priority');
+        priority.textContent = `${formatLabel(task.priority)} Priority`;
+
+        const editButton = document.createElement('button');
+        editButton.classList.add('edit-task');
+        editButton.textContent = 'Edit';
+
+        const deleteButton = document.createElement('button');
+        deleteButton.classList.add('delete-task');
+        deleteButton.textContent = 'Delete';
+
+        taskInfo.append(status, priority, editButton, deleteButton);
+        article.append(title, taskInfo);
+
+        editButton.addEventListener('click', () => {
+            editingTask = task;
+            document.querySelector('#task-title').value = task.title;
+            document.querySelector('#task-description').value = task.description || '';
+            document.querySelector('#task-status').value = task.status;
+            document.querySelector('#task-priority').value = task.priority;
+            document.querySelector('#task-due-date').value = task.due_date || '';
+
+            taskSubmitButton.textContent = 'Update Task';
+            cancelEditButton.classList.remove('hidden');
+            taskForm.classList.remove('hidden');
+        });
 
         deleteButton.addEventListener('click', async () => {
             const confirmed = confirm(`Delete "${task.title}"?`);
@@ -139,6 +181,11 @@ async function loadTasks(projectId) {
 
         taskList.appendChild(article);
     });
+
+    const activeFilter = document.querySelector('.filter-button.active');
+    if (activeFilter) {
+        applyFilter(activeFilter.dataset.filter);
+    }
 }
 
 filterButtons.forEach((button) => {
@@ -146,21 +193,8 @@ filterButtons.forEach((button) => {
         filterButtons.forEach((button) => {
             button.classList.remove('active');
         });
-
         button.classList.add('active');
-        const selectedFilter = button.dataset.filter;
-        const tasks = document.querySelectorAll('.task');
-
-        tasks.forEach((task) => {
-            if (
-                selectedFilter === 'all' ||
-                task.dataset.status === selectedFilter
-            ) {
-                task.style.display = 'block';
-            } else {
-                task.style.display = 'none';
-            }
-        });
+        applyFilter(button.dataset.filter);
     });
 });
 
@@ -168,34 +202,49 @@ filterButtons.forEach((button) => {
 taskForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     const title = document.querySelector('#task-title').value;
+    const description = document.querySelector('#task-description').value;
     const status = document.querySelector('#task-status').value;
     const priority = document.querySelector('#task-priority').value;
     const dueDate = document.querySelector('#task-due-date').value;
 
     const task = {
         title: title,
+        description: description || null,
         status: status,
         priority: priority,
         due_date: dueDate || null
     };
 
-    const response = await fetch(
-        `http://127.0.0.1:8000/projects/${selectedProjectId}/tasks`,
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(task)
-        }
-    );
+    let url;
+    let method;
+
+    if (editingTask === null) {
+        url = `http://127.0.0.1:8000/projects/${selectedProjectId}/tasks`;
+        method = 'POST';
+    } else {
+        url = `http://127.0.0.1:8000/tasks/${editingTask.id}`;
+        method = 'PUT';
+    }
+
+    const response = await fetch(url, {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(task)
+    });
 
     if (response.ok) {
+        editingTask = null;
+
         taskForm.reset();
         taskForm.classList.add('hidden');
+        taskSubmitButton.textContent = 'Create Task';
+        cancelEditButton.classList.add('hidden');
+
         loadTasks(selectedProjectId);
     } else {
-        alert('Failed to create task.')
+        alert('Failed to save task.')
     }
 });
 
@@ -231,4 +280,17 @@ projectForm.addEventListener('submit', async (event) => {
     }
 });
 
+function applyFilter(selectedFilter) {
+    const tasks = document.querySelectorAll('.task');
+    tasks.forEach((task) => {
+        if (
+            selectedFilter === 'all' ||
+            task.dataset.status === selectedFilter
+        ) {
+            task.style.display = 'block';
+        } else {
+            task.style.display = 'none';
+        }
+    });
+}
 loadProjects();

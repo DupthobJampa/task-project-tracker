@@ -136,10 +136,33 @@ button:hover{
     border-radius: 8px;
 }
 
-.task-form input,
-.task-form select {
-    padding: 8px;
-    margin-right: 8px;
+.task-form-text {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.task-form-text input,
+.task-form-text textarea {
+    flex: 1;
+    min-width: 0;
+    padding: 10px;
+}
+
+.task-form-text textarea {
+    resize: vertical;
+    min-height: 42px;
+}
+
+.task-form-options {
+    display: flex;
+    gap: 10px;
+}
+
+.task-form-options select,
+.task-form-options input,
+.task-form-options button {
+    padding: 8px 10px;
 }
 
 .project-form {
