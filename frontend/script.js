@@ -2,6 +2,13 @@ const taskList = document.querySelector('.task-list');
 const filterButtons = document.querySelectorAll('.filter-button');
 const projectList = document.querySelector('.project-list');
 const projectTitle = document.querySelector('.task-header h2');
+const addTaskButton = document.querySelector('#add-task-button');
+const taskForm = document.querySelector('#task-form')
+
+let selectedProjectId = null;
+addTaskButton.addEventListener('click', () => {
+    taskForm.classList.toggle('hidden');
+});
 
 function formatLabel(value) {
     return value
@@ -25,6 +32,7 @@ async function loadProjects() {
 
             item.classList.add('active');
 
+            selectedProjectId = project.id;
             projectTitle.textContent = project.name;
             loadTasks(project.id);
         });
@@ -39,15 +47,11 @@ async function loadProjects() {
 }
 
 async function loadTasks(projectId) {
-
     const response = await fetch(
-
         `http://127.0.0.1:8000/tasks?project_id=${projectId}`
-
     );
 
     const tasks = await response.json();
-
     taskList.innerHTML = '';
 
     tasks.forEach((task) => {
@@ -87,6 +91,41 @@ filterButtons.forEach((button) => {
             }
         });
     });
+});
+
+
+taskForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const title = document.querySelector('#task-title').value;
+    const status = document.querySelector('#task-status').value;
+    const priority = document.querySelector('#task-priority').value;
+    const dueDate = document.querySelector('#task-due-date').value;
+
+    const task = {
+        title: title,
+        status: status,
+        priority: priority,
+        due_date: dueDate || null
+    };
+
+    const response = await fetch(
+        `http://127.0.0.1:8000/projects/${selectedProjectId}/tasks`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(task)
+        }
+    );
+
+    if (response.ok) {
+        taskForm.reset();
+        taskForm.classList.add('hidden');
+        loadTasks(selectedProjectId);
+    } else {
+        alert('Failed to create task.')
+    }
 });
 
 loadProjects();

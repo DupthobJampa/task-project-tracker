@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Tracker</title>
-    <link rel="stylesheet" href="style.css"> 
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
@@ -21,7 +21,7 @@
         <section>
             <div class="task-header">
                 <h2>Internship Preparation</h2>
-                <button>Add Task</button>
+                <button id = "add-task-button">Add Task</button>
             </div>
 
             <div class="filters">
@@ -31,8 +31,26 @@
                 <button class="filter-button" data-filter="completed">Completed</button>
             </div>
 
-            <div class="task-list">
-            </div>
+            <form id="task-form" class="task-form hidden">
+                <input id="task-title" type="text" placeholder="Task title" required>
+                <select id="task-status">
+                    <option value="todo">Todo</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="completed">Completed</option>
+                </select>
+
+                <select id="task-priority">
+                    <option value="low">Low Priority</option>
+                    <option value="medium" selected>Medium Priority</option>
+                    <option value="high">High Priority</option>
+                </select>
+
+                <input id="task-due-date" type="date">
+
+                <button type="submit">Create Task</button>
+            </form>
+
+            <div class="task-list"></div>
         </section>
     </main>
 <script src="script.js"></script>

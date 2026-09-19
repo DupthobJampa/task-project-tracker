@@ -123,3 +123,21 @@ button:hover{
     color: white;
     border-color: #333;
 }
+
+.hidden {
+    display: none;
+}
+
+.task-form {
+    max-width: 700px;
+    margin-bottom: 25px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.task-form input,
+.task-form select {
+    padding: 8px;
+    margin-right: 8px;
+}
