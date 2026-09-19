@@ -64,8 +64,31 @@ async function loadTasks(projectId) {
             <div class="task-info">
                 <span class="status">${formatLabel(task.status)}</span>
                 <span class="priority">${formatLabel(task.priority)} Priority</span>
+                <button class="delete-task">Delete</button>
             </div>
         `;
+        const deleteButton = article.querySelector('.delete-task');
+
+        deleteButton.addEventListener('click', async () => {
+            const confirmed = confirm(`Delete "${task.title}"?`);
+
+            if (!confirmed) {
+                return;
+            }
+            const response = await fetch(
+                `http://127.0.0.1:8000/tasks/${task.id}`,
+                {
+                    method: 'DELETE'
+                }
+            );
+
+            if (response.ok) {
+                loadTasks(selectedProjectId);
+            } else {
+                alert('Failed to delete task.');
+            }
+        });
+
         taskList.appendChild(article);
     });
 }
