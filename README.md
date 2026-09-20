@@ -38,7 +38,7 @@ The application provides a REST API backed by a relational PostgreSQL database a
 
 ## Project Structure
 ```text
-task-project-tracker-api/
+task-project-tracker/
 ├── app/
 │   ├── __init__.py
 │   ├── database.py
@@ -73,8 +73,8 @@ Requires Python and PostgreSQL.
 Clone the repository and set up the Python environment:
 
 ```bash
-git clone https://github.com/DupthobJampa/task-project-tracker-api.git
-cd task-project-tracker-api
+git clone https://github.com/DupthobJampa/task-project-tracker.git
+cd task-project-tracker
 
 python3 -m venv .venv
 source .venv/bin/activate
