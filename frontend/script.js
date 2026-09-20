@@ -10,9 +10,11 @@ const taskSubmitButton = document.querySelector('#task-submit-button');
 const newProjectButton = document.querySelector('#new-project-button');
 const projectForm = document.querySelector('#project-form');
 const cancelEditButton = document.querySelector('#cancel-edit-button');
+const deleteProjectButton = document.querySelector('#delete-project-button');
+
 let selectedProjectId = null;
 let editingTask = null;
-const deleteProjectButton = document.querySelector('#delete-project-button');
+
 
 cancelEditButton.addEventListener('click', () => {
     editingTask = null;
@@ -55,6 +57,11 @@ newProjectButton.addEventListener('click', () => {
 });
 
 addTaskButton.addEventListener('click', () => {
+    if (selectedProjectId === null) {
+        alert('Create a project first.');
+        return;
+    }
+
     editingTask = null;
     taskForm.reset();
     taskSubmitButton.textContent = 'Create Task';
@@ -88,6 +95,7 @@ async function loadProjects(projectIdToSelect = null) {
 
             selectedProjectId = project.id;
             projectTitle.textContent = project.name;
+
             loadTasks(project.id);
         });
         projectList.appendChild(item);
@@ -104,8 +112,11 @@ async function loadProjects(projectIdToSelect = null) {
 
     if (projectToSelect) {
         projectToSelect.click();
+    } else {
+        selectedProjectId = null;
+        projectTitle.textContent = 'No Project Selected';
+        taskList.innerHTML = '';
     }
-
 }
 
 async function loadTasks(projectId) {
@@ -124,6 +135,9 @@ async function loadTasks(projectId) {
         const title = document.createElement('h3');
         title.textContent = task.title;
 
+        const description = document.createElement('p');
+        description.textContent = task.description || 'No description';
+
         const taskInfo = document.createElement('div');
         taskInfo.classList.add('task-info');
 
@@ -135,6 +149,12 @@ async function loadTasks(projectId) {
         priority.classList.add('priority');
         priority.textContent = `${formatLabel(task.priority)} Priority`;
 
+        const dueDate = document.createElement('span');
+        dueDate.classList.add('due-date');
+        dueDate.textContent = task.due_date
+            ? `Due: ${task.due_date}`
+            : 'No Due Date';
+
         const editButton = document.createElement('button');
         editButton.classList.add('edit-task');
         editButton.textContent = 'Edit';
@@ -143,8 +163,15 @@ async function loadTasks(projectId) {
         deleteButton.classList.add('delete-task');
         deleteButton.textContent = 'Delete';
 
-        taskInfo.append(status, priority, editButton, deleteButton);
-        article.append(title, taskInfo);
+        taskInfo.append(
+            status, 
+            priority, 
+            dueDate,
+            editButton, 
+            deleteButton
+        );
+        
+        article.append(title, description, taskInfo);
 
         editButton.addEventListener('click', () => {
             editingTask = task;
@@ -244,7 +271,7 @@ taskForm.addEventListener('submit', async (event) => {
 
         loadTasks(selectedProjectId);
     } else {
-        alert('Failed to save task.')
+        alert('Failed to save task.');
     }
 });
 

@@ -37,7 +37,9 @@
 
         <section>
             <div class="task-header">
-                <h2>Internship Preparation</h2>
+                <div>
+                    <h2>Tasks</h2>
+                </div>
 
                 <div class="project-actions">
                     <button id="add-task-button">Add Task</button>
@@ -54,17 +56,19 @@
             </div>
 
             <form id="task-form" class="task-form hidden">
-                <input
-                    id="task-title"
-                    type="text"
-                    placeholder="Task title"
-                    required
+                <div class="task-form-text">
+                    <input
+                        id="task-title"
+                        type="text"
+                        placeholder="Task title"
+                        required
                     >
 
-                <textarea
-                    id="task-description"
-                    placeholder="Description"
-                ></textarea>
+                    <textarea
+                        id="task-description"
+                        placeholder="Description"
+                    ></textarea>
+                </div>
 
                 <div class="task-form-options">
                     <select id="task-status">
