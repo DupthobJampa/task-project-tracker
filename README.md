@@ -3,6 +3,12 @@ A full-stack task and project management application built with Python, FastAPI,
 
 The application provides a REST API backed by a relational PostgreSQL database and a browser-based interface for managing projects and tasks.
 
+## Live Demo
+[View the live application](https://task-project-tracker-frontend.onrender.com
+)
+
+> The application is hosted on Render's free tier, so the backend may take a short time to respond after a period of inactivity.
+
 ## Features
 - Create, view, and delete projects
 - Create, view, update, and delete tasks
