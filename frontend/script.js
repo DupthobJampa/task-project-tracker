@@ -1,3 +1,5 @@
+const API_URL = 'http://127.0.0.1:8000';
+
 const taskList = document.querySelector('.task-list');
 const filterButtons = document.querySelectorAll('.filter-button');
 
@@ -38,7 +40,7 @@ deleteProjectButton.addEventListener('click', async () => {
     }
 
     const response = await fetch(
-        `http://127.0.0.1:8000/projects/${selectedProjectId}`,
+        `${API_URL}/projects/${selectedProjectId}`,
         {
             method: 'DELETE'
         }
@@ -77,7 +79,7 @@ function formatLabel(value) {
 }
 
 async function loadProjects(projectIdToSelect = null) {
-    const response = await fetch('http://127.0.0.1:8000/projects');
+    const response = await fetch(`${API_URL}/projects`);
     const projects = await response.json();
     projectList.innerHTML = '';
 
@@ -121,7 +123,7 @@ async function loadProjects(projectIdToSelect = null) {
 
 async function loadTasks(projectId) {
     const response = await fetch(
-        `http://127.0.0.1:8000/tasks?project_id=${projectId}`
+        `${API_URL}/tasks?project_id=${projectId}`
     );
 
     const tasks = await response.json();
@@ -170,7 +172,7 @@ async function loadTasks(projectId) {
             editButton, 
             deleteButton
         );
-        
+
         article.append(title, description, taskInfo);
 
         editButton.addEventListener('click', () => {
@@ -193,7 +195,7 @@ async function loadTasks(projectId) {
                 return;
             }
             const response = await fetch(
-                `http://127.0.0.1:8000/tasks/${task.id}`,
+                `${API_URL}/tasks/${task.id}`,
                 {
                     method: 'DELETE'
                 }
@@ -246,10 +248,10 @@ taskForm.addEventListener('submit', async (event) => {
     let method;
 
     if (editingTask === null) {
-        url = `http://127.0.0.1:8000/projects/${selectedProjectId}/tasks`;
+        url = `${API_URL}/projects/${selectedProjectId}/tasks`;
         method = 'POST';
     } else {
-        url = `http://127.0.0.1:8000/tasks/${editingTask.id}`;
+        url = `${API_URL}/tasks/${editingTask.id}`;
         method = 'PUT';
     }
 
@@ -287,7 +289,7 @@ projectForm.addEventListener('submit', async (event) => {
     };
 
     const response = await fetch(
-        'http://127.0.0.1:8000/projects',
+        `${API_URL}/projects`,
         {
             method: 'POST',
             headers: {
