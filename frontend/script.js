@@ -1,4 +1,8 @@
-const API_URL = 'https://task-project-tracker.onrender.com';
+const API_URL = 
+    window.location.hostname === '127.0.0.1' ||
+    window.location.hostname === 'localhost'
+        ? 'http://127.0.0.1:8000'
+        : 'https://task-project-tracker.onrender.com';
 
 const taskList = document.querySelector('.task-list');
 const filterButtons = document.querySelectorAll('.filter-button');
