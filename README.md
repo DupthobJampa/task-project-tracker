@@ -4,10 +4,11 @@ A full-stack task and project management application built with Python, FastAPI,
 The application provides a REST API backed by a relational PostgreSQL database and a browser-based interface for managing projects and tasks.
 
 ## Live Demo
-[View the live application](https://task-project-tracker-frontend.onrender.com
-)
+[View the live application](https://task-project-tracker-frontend.onrender.com)
 
 > The application is hosted on Render's free tier, so the backend may take a short time to respond after a period of inactivity.
+
+![Task & Project Tracker interface](assets/task-tracker-demo.png)
 
 ## Features
 - Create, view, and delete projects
@@ -18,7 +19,7 @@ The application provides a REST API backed by a relational PostgreSQL database a
 - Automatically delete associated tasks when a project is deleted
 - View project task summaries through the API
 - Automatically update task modification timestamps using a PostgreSQL trigger
-- Reset and recreate the database using a shell script
+- Reset and recreate the local development database using a shell script
 
 ## Tech Stack
 
@@ -41,6 +42,7 @@ The application provides a REST API backed by a relational PostgreSQL database a
 ### Tools
 - Git
 - Shell scripting
+- Render
 
 ## Project Structure
 ```text
@@ -87,7 +89,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Create or reset the PostgreSQL database:
+Create or reset the local PostgreSQL database:
 ```bash
 ./scripts/reset_db.sh
 ```
